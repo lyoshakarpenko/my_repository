@@ -40,28 +40,27 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
   config.vm.define "server2" do |server2|
     server2.vm.hostname = "server2"
-	server2.vm.network "private_network", ip: "192.168.0.11"
-	server2.vm.provision "shell", inline: <<-SHELL
-	  FILE_PATH=/etc/hosts
-	  echo "192.168.0.10 server1" >> $FILE_PATH
-	  #ping -c 2 server1
-	SHELL
+    server2.vm.network "private_network", ip: "192.168.0.11"
+    server2.vm.provision "shell", inline: <<-SHELL
+      FILE_PATH=/etc/hosts
+      echo "192.168.0.10 server1" >> $FILE_PATH
+    SHELL
   end  
   
   config.vm.define "server1" do |server1|
     server1.vm.hostname = "server1"
-	server1.vm.network "private_network", ip: "192.168.0.10"
-	server1.vm.provision "shell", inline: <<-SHELL
+    server1.vm.network "private_network", ip: "192.168.0.10"
+    server1.vm.provision "shell", inline: <<-SHELL
       yum install git -y
-	  git init
-	  cd /home/vagrant/.git/
-	  git clone https://github.com/lyoshakarpenko/my_repository.git
+      git init
+      cd /home/vagrant/.git/
+      git clone https://github.com/lyoshakarpenko/my_repository.git
       cd /home/vagrant/.git/my_repository
-	  git checkout task2
-	  cat File4
+      git checkout task2
+      cat File4
       FILE_PATH=/etc/hosts
-	  echo "192.168.0.11 server2" >> $FILE_PATH
-	  ping -c 2 server2
+      echo "192.168.0.11 server2" >> $FILE_PATH
+      ping -c 2 server2
     SHELL
   end
   
