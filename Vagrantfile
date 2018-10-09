@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     vb.gui = true
   #
   # Customize the amount of memory on the VM:
-  #  vb.memory = "1024"
+  # vb.memory = "1024"
   end
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
@@ -52,8 +52,6 @@ Vagrant.configure("2") do |config|
     server1.vm.network "private_network", ip: "192.168.0.10"
     server1.vm.provision "shell", inline: <<-SHELL
       yum install git -y
-      #git init
-      #cd /home/vagrant/.git/
       git clone https://github.com/lyoshakarpenko/my_repository.git
       cd my_repository
       git checkout task2
