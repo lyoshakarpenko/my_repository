@@ -41,10 +41,9 @@ Vagrant.configure("2") do |config|
     server2.vm.hostname = "server2"
     server2.vm.network "private_network", ip: "192.168.0.11"
     server2.vm.provision "shell", inline: <<-SHELL
-      ccd .ssh
-	    ssh-keygen -t rsa -N "" -f id_rsa
-	    touch /vagrant/vagrant_data
-	    cat id_rsa.pub >>  /vagrant/vagrant_data
+      ssh-keygen -t rsa -N "" -f id_rsa
+      touch /vagrant/vagrant_data
+      cat id_rsa.pub >>  /vagrant/vagrant_data
       chmod 700 /home/vagrant/.ssh/
       chmod 600 /home/vagrant/.ssh/authorized_keys
       chown -R vagrant:vagrant /home/vagrant/.ssh      
