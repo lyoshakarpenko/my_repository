@@ -7,7 +7,6 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.5"
-  config.ssh.insert_key=false
   config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
     vb.gui = true
@@ -42,6 +41,10 @@ Vagrant.configure("2") do |config|
     server2.vm.hostname = "server2"
     server2.vm.network "private_network", ip: "192.168.0.11"
     server2.vm.provision "shell", inline: <<-SHELL
+      ccd .ssh
+	    ssh-keygen -t rsa -N "" -f id_rsa
+	    touch /vagrant/vagrant_data
+	    cat id_rsa.pub >>  /vagrant/vagrant_data
       chmod 700 /home/vagrant/.ssh/
       chmod 600 /home/vagrant/.ssh/authorized_keys
       chown -R vagrant:vagrant /home/vagrant/.ssh      
@@ -54,6 +57,7 @@ Vagrant.configure("2") do |config|
     server1.vm.hostname = "server1"
     server1.vm.network "private_network", ip: "192.168.0.10"
     server1.vm.provision "shell", inline: <<-SHELL
+      cat /vagrant/vagrant_data >> ~vagrant/.ssh/authorized_keys
       chmod 700 /home/vagrant/.ssh/
       chmod 600 /home/vagrant/.ssh/authorized_keys
       chown -R vagrant:vagrant /home/vagrant/.ssh 
