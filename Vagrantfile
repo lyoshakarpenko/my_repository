@@ -41,6 +41,7 @@ Vagrant.configure("2") do |config|
     server2.vm.hostname = "server2"
     server2.vm.network "private_network", ip: "192.168.0.11"
     server2.vm.provision "shell", inline: <<-SHELL
+      cd .ssh
       ssh-keygen -t rsa -N "" -f id_rsa
       touch /vagrant/vagrant_data
       cat id_rsa.pub >>  /vagrant/vagrant_data
