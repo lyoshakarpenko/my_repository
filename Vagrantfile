@@ -45,6 +45,8 @@ Vagrant.configure("2") do |config|
       ssh-keygen -t rsa -N "" -f id_rsa
       touch /vagrant/vagrant_data
       cat id_rsa.pub >>  /vagrant/vagrant_data
+      cat id_rsa.pub >> ~vagrant/.ssh/authorized_keys
+	    cp id_rsa /vagrant/id_rsa
       chmod 700 /home/vagrant/.ssh/
       chmod 600 /home/vagrant/.ssh/authorized_keys
       chown -R vagrant:vagrant /home/vagrant/.ssh      
@@ -57,7 +59,10 @@ Vagrant.configure("2") do |config|
     server1.vm.hostname = "server1"
     server1.vm.network "private_network", ip: "192.168.0.10"
     server1.vm.provision "shell", inline: <<-SHELL
+      cd .ssh
+      cp /vagrant/id_rsa id_rsa
       cat /vagrant/vagrant_data >> ~vagrant/.ssh/authorized_keys
+      chmod 600 /home/vagrant/.ssh/id_rsa
       chmod 700 /home/vagrant/.ssh/
       chmod 600 /home/vagrant/.ssh/authorized_keys
       chown -R vagrant:vagrant /home/vagrant/.ssh 
