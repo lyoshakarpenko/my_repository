@@ -51,7 +51,6 @@ Vagrant.configure("2") do |config|
       FILE_PATH=/etc/httpd/conf/workers.properties
       yum install httpd -y
       systemctl enable httpd.service
-      systemctl start httpd 
       systemctl stop firewalld
       cp /vagrant/mod_jk.so /etc/httpd/modules/
       echo worker.list=lb >> $FILE_PATH
@@ -78,7 +77,7 @@ Vagrant.configure("2") do |config|
       echo JkLogFile logs/mod_jk.log >> /etc/httpd/conf/httpd.conf
       echo JkLogLevel info >> /etc/httpd/conf/httpd.conf
       echo JkMount /test* lb >> /etc/httpd/conf/httpd.conf
-      service httpd restart
+      systemctl start httpd 
     SHELL
   end  
   
