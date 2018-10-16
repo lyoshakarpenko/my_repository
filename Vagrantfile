@@ -5,6 +5,7 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
+$TOMCAT_COUNT = 4
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.5"
   #config.ssh.insert_key=false
@@ -47,22 +48,30 @@ Vagrant.configure("2") do |config|
     apache.vm.network "private_network", ip: "192.168.0.111"
     apache.vm.network "forwarded_port", guest: 80 , host: 8080, host_ip: "192.168.0.111"
     apache.vm.provision "shell", inline: <<-SHELL
+      FILE_PATH=/etc/httpd/conf/workers.properties
       yum install httpd -y
       systemctl enable httpd.service
       systemctl start httpd 
       systemctl stop firewalld
       cp /vagrant/mod_jk.so /etc/httpd/modules/
-
-      echo worker.list=lb >> /etc/httpd/conf/workers.properties
-      echo worker.lb.type=lb >> /etc/httpd/conf/workers.properties
-      echo worker.lb.balance_workers=tomcat1, tomcat2 >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat1.host="192.168.0.10" >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat1.port=8009 >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat1.type=ajp13 >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat2.host="192.168.0.11" >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat2.port=8009 >> /etc/httpd/conf/workers.properties
-      echo worker.tomcat2.type=ajp13 >> /etc/httpd/conf/workers.properties
-
+      echo worker.list=lb >> $FILE_PATH
+	    echo worker.lb.type=lb >> $FILE_PATH
+	    echo -n worker.lb.balance_workers= >> $FILE_PATH
+	    i=1
+	    while [[ $i -le #{$TOMCAT_COUNT} ]]
+	    do
+	      echo -n tomcat$i, >> $FILE_PATH
+		    i=$[i+1]
+	    done
+	    echo >> $FILE_PATH
+	    i=1
+	    while [[ $i -le #{$TOMCAT_COUNT} ]]
+	    do
+	      echo worker.tomcat$i.host="192.168.0.1$i" >> $FILE_PATH
+	      echo worker.tomcat$i.port=8009 >> $FILE_PATH
+	      echo worker.tomcat$i.type=ajp13 >> $FILE_PATH
+	      i=$[i+1]
+	    done
       echo LoadModule jk_module modules/mod_jk.so >> /etc/httpd/conf/httpd.conf 
       echo JkWorkersFile conf/workers.properties >> /etc/httpd/conf/httpd.conf
       echo JkShmFile /tmp/shm >> /etc/httpd/conf/httpd.conf
@@ -73,29 +82,20 @@ Vagrant.configure("2") do |config|
     SHELL
   end  
   
-  config.vm.define "tomcat1" do |tomcat1|
-    tomcat1.vm.hostname = "tomcat1"
-    tomcat1.vm.network "private_network", ip: "192.168.0.10"
-    tomcat1.vm.provision "shell", inline: <<-SHELL
+(1..$TOMCAT_COUNT).each do |i|
+  config.vm.define "tomcat#{i}" do |tomcat|
+    tomcat.vm.network "private_network", ip: "192.168.0.1#{i}"
+    tomcat.vm.provision "shell", inline: <<-SHELL
+      echo hello from tomcat #{i}
       yum install tomcat tomcat-webapps tomcat-admin-webapps -y
       systemctl enable tomcat
-      systemctl start tomcat
-      mkdir /usr/share/tomcat/webapps/test
-      echo tomcat11111 >> /usr/share/tomcat/webapps/test/index.html
-    SHELL
+	    systemctl start tomcat
+	    mkdir /usr/share/tomcat/webapps/test
+	    echo tomcat#{i} >> /usr/share/tomcat/webapps/test/index.html
+	  SHELL
   end
-  
-  config.vm.define "tomcat2" do |tomcat2|
-    tomcat2.vm.hostname = "tomcat2"
-    tomcat2.vm.network "private_network", ip: "192.168.0.11"
-    tomcat2.vm.provision "shell", inline: <<-SHELL
-      yum install tomcat tomcat-webapps tomcat-admin-webapps -y
-      systemctl enable tomcat
-      systemctl start tomcat
-      mkdir /usr/share/tomcat/webapps/test
-      echo tomcat22222 >> /usr/share/tomcat/webapps/test/index.html
-    SHELL
-  end
+end
+ 
   
   
   # Create a private network, which allows host-only access to the machine
