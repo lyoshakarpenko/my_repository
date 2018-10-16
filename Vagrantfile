@@ -5,7 +5,7 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
-$TOMCAT_COUNT = 4
+$TOMCAT_COUNT = 3
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.5"
   #config.ssh.insert_key=false
@@ -55,23 +55,23 @@ Vagrant.configure("2") do |config|
       systemctl stop firewalld
       cp /vagrant/mod_jk.so /etc/httpd/modules/
       echo worker.list=lb >> $FILE_PATH
-	    echo worker.lb.type=lb >> $FILE_PATH
-	    echo -n worker.lb.balance_workers= >> $FILE_PATH
-	    i=1
-	    while [[ $i -le #{$TOMCAT_COUNT} ]]
-	    do
-	      echo -n tomcat$i, >> $FILE_PATH
-		    i=$[i+1]
-	    done
-	    echo >> $FILE_PATH
-	    i=1
-	    while [[ $i -le #{$TOMCAT_COUNT} ]]
-	    do
-	      echo worker.tomcat$i.host="192.168.0.1$i" >> $FILE_PATH
-	      echo worker.tomcat$i.port=8009 >> $FILE_PATH
-	      echo worker.tomcat$i.type=ajp13 >> $FILE_PATH
-	      i=$[i+1]
-	    done
+      echo worker.lb.type=lb >> $FILE_PATH
+      echo -n worker.lb.balance_workers= >> $FILE_PATH
+      i=1
+      while [[ $i -le #{$TOMCAT_COUNT} ]]
+      do
+        echo -n tomcat$i, >> $FILE_PATH
+        i=$[i+1]
+      done
+      echo >> $FILE_PATH
+      i=1
+      while [[ $i -le #{$TOMCAT_COUNT} ]]
+      do
+        echo worker.tomcat$i.host="192.168.0.1$i" >> $FILE_PATH
+        echo worker.tomcat$i.port=8009 >> $FILE_PATH
+        echo worker.tomcat$i.type=ajp13 >> $FILE_PATH
+        i=$[i+1]
+      done
       echo LoadModule jk_module modules/mod_jk.so >> /etc/httpd/conf/httpd.conf 
       echo JkWorkersFile conf/workers.properties >> /etc/httpd/conf/httpd.conf
       echo JkShmFile /tmp/shm >> /etc/httpd/conf/httpd.conf
@@ -89,10 +89,10 @@ Vagrant.configure("2") do |config|
       echo hello from tomcat #{i}
       yum install tomcat tomcat-webapps tomcat-admin-webapps -y
       systemctl enable tomcat
-	    systemctl start tomcat
-	    mkdir /usr/share/tomcat/webapps/test
-	    echo tomcat#{i} >> /usr/share/tomcat/webapps/test/index.html
-	  SHELL
+      systemctl start tomcat
+      mkdir /usr/share/tomcat/webapps/test
+      echo tomcat#{i} >> /usr/share/tomcat/webapps/test/index.html
+    SHELL
   end
 end
  
