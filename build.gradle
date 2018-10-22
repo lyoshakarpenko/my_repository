@@ -1,0 +1,46 @@
+apply plugin :'war'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "log4j:log4j:1.2.17"
+	compile "commons-io:commons-io:2.4"
+}
+
+task increment << {
+	def versionName = version.split("\\.")
+    def last = Integer.parseInt(versionName[versionName.length - 1])
+    versionName[versionName.length - 1] = Integer.toString(last + 1)
+    versionName = versionName.join(".")
+	ant.propertyfile(file: "gradle.properties") {
+	entry(key: "version", value: versionName)
+	}
+}
+
+task populate {
+    //dependsOn processResources, classes, compileJava
+	//println 'AAAA'
+	//File ("build/resources/main/xx/greeting.txt") << 'version'
+	def input = new File("src/main/resources/greeting.txt")
+	def text = input.getText('UTF-8')
+	text= text+'\n version = '+version
+    println text
+	def out = new File("build/resources/main/greeting2.txt")
+	out << text
+// ant.propertyfile(file: "build/resources/main/xx/greeting.txt") {
+//entry(key: "version", value: version)
+//}
+}
+//task CopyRes(type: Copy) {
+//    from 'src/main/resources'
+//    into 'build/resources/main/xx'
+//	mustRunAfter processResources
+//}
+
+populate.dependsOn processResources
+//processResources {dependsOn CopyRes}
+//compileJava.mustRunAfter processResources 
+war {dependsOn populate}
+//populate.shouldRunAfter classes
