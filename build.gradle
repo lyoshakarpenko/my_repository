@@ -20,23 +20,11 @@ task increment << {
 }
 
 task populate {
-    def input = new File("src/main/resources/greeting.txt")
-    def text = input.getText('UTF-8')
-    text= text+'\n version = '+version
-    println text
-    def out = new File("build/resources/main/greeting.txt")
-    out << text
-    //ant.propertyfile(file: "build/resources/main/greeting.txt") {
-    //entry(key: "version", value: version)
-    //}
+    doLast { 
+	def out = new File("build/resources/main/greeting.txt")
+	out << '\nversion = '+version
+    }
 }
 
-//task CopyRes(type: Copy) {
-//    from 'src/main/resources'
-//    into 'build/resources/main/xx'
-//    mustRunAfter processResources
-//}
-
-populate.dependsOn processResources
 war {dependsOn populate}
 
