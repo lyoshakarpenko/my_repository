@@ -72,5 +72,5 @@ task sorting  << {
     println sortedArray
 }
 
-war {dependsOn populate}
-
+war {dependsOn populate
+war.archiveName='gradleSample-master'}
