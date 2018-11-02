@@ -73,4 +73,4 @@ task sorting  << {
 }
 
 war {dependsOn populate
-war.archiveName='gradleSample'}
+war.archiveName='gradleSample.war'}
