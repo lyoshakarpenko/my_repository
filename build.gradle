@@ -9,7 +9,7 @@ dependencies {
     compile "commons-io:commons-io:2.4"
 }
 
-task increment << {
+task increment  {
     def versionName = version.split("\\.")
     def last = Integer.parseInt(versionName[versionName.length - 1])
     versionName[versionName.length - 1] = Integer.toString(last + 1)
@@ -25,7 +25,7 @@ task populate {
     out << '\nversion = '+version
     }
 }
-task sorting  {
+task sorting  << {
     //unsorted array of versions
     def unsortedArray = [
         '1.1.3',
