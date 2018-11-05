@@ -22,7 +22,7 @@ task increment  << {
 task populate {
     doLast{ 
     def out = new File("build/resources/main/greeting.txt")
-    out << '\nversion = '+version
+    out << '\nversion='+version
     }
 }
 task sorting  << {
