@@ -19,7 +19,7 @@ task increment  {
     }
 }
 
-task populate {
+task populate {dependsOn increment
     doLast{ 
     def out = new File("build/resources/main/greeting.txt")
     out << '\nversion = '+version
