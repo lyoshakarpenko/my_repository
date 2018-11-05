@@ -9,7 +9,7 @@ dependencies {
     compile "commons-io:commons-io:2.4"
 }
 
-task increment  {
+task increment  << {
     def versionName = version.split("\\.")
     def last = Integer.parseInt(versionName[versionName.length - 1])
     versionName[versionName.length - 1] = Integer.toString(last + 1)
@@ -19,7 +19,7 @@ task increment  {
     }
 }
 
-task populate {dependsOn increment
+task populate {
     doLast{ 
     def out = new File("build/resources/main/greeting.txt")
     out << '\nversion = '+version
