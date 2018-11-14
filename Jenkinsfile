@@ -1,7 +1,8 @@
 def version
+def mybranch='task7'
 node ("master"){
     stage('Build') {
-        git branch: 'task7', credentialsId: '7feb6873-abb9-4156-9b24-aa6d125348f3', url: 'https://github.com/lyoshakarpenko/my_repository.git'
+        git branch: mybranch, credentialsId: '7feb6873-abb9-4156-9b24-aa6d125348f3', url: 'https://github.com/lyoshakarpenko/my_repository.git'
         sh 'chmod 700 gradlew'
         sh './gradlew'
         sh './gradlew task increment'
@@ -19,12 +20,12 @@ node ("master"){
     stage('Push git'){ 
         withCredentials([usernamePassword(credentialsId: '7feb6873-abb9-4156-9b24-aa6d125348f3', passwordVariable: 'gitPass', usernameVariable: 'gitUser')]) {
             sh """ git commit -m "increment version to ${version}" "gradle.properties" """
-            sh 'git push https://${gitUser}:${gitPass}@github.com/lyoshakarpenko/my_repository.git task6'
+            sh """git push https://${gitUser}:${gitPass}@github.com/lyoshakarpenko/my_repository.git ${mybranch}"""
             sh 'git checkout master'
             sh 'git pull'
             sh 'git checkout --theirs gradle.properties'
             sh 'git add gradle.properties'
-            sh 'git merge task7'
+            sh """git merge ${mybranch}"""
             sh 'git push https://${gitUser}:${gitPass}@github.com/lyoshakarpenko/my_repository.git master'
             version = 'v'+version
             sh """git tag -a ${version}  -m ${version} """
