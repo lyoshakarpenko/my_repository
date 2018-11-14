@@ -19,7 +19,7 @@ node ("master"){
     stage('Push git'){ 
         withCredentials([usernamePassword(credentialsId: '7feb6873-abb9-4156-9b24-aa6d125348f3', passwordVariable: 'gitPass', usernameVariable: 'gitUser')]) {
             sh """ git commit -m "increment version to ${version}" "gradle.properties" """
-            sh 'git push https://${gitUser}:${gitPass}@github.com/lyoshakarpenko/my_repository.git task6'
+            sh 'git push https://${gitUser}:${gitPass}@github.com/lyoshakarpenko/my_repository.git task7'
             sh 'git checkout master'
             sh 'git pull'
             sh 'git checkout --theirs gradle.properties'
