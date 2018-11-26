@@ -19,9 +19,10 @@ docker_container 'registry' do
     port '5000:5000'
 end
 
-bash 'tuning_registry' do
-    code <<-EOF
-        echo {'"insecure-registries"' : [ '"192.168.0.11:5000"' ]} >> /etc/docker/daemon.json
-        systemctl restart docker
-    EOF
+template '/etc/docker/daemon.json' do
+    source 'daemon.json'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    action :create
 end
