@@ -1,0 +1,9 @@
+DEPENDENCIES
+  mycookbook
+    path: .
+    metadata: true
+
+GRAPH
+  docker (4.6.7)
+  mycookbook (0.1.27)
+    docker (>= 0.0.0)
