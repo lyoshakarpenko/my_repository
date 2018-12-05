@@ -1,5 +1,5 @@
 # Current version
-default['version']='1.0.2'
+default['version']='1.0.0'
 #Image tag
 default['flag']='0'
 #Url registry
