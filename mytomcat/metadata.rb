@@ -4,7 +4,7 @@ maintainer_email 'you@example.com'
 license 'All Rights Reserved'
 description 'Installs/Configures mytomcat'
 long_description 'Installs/Configures mytomcat'
-version '0.1.50'
+version '0.1.51'
 chef_version '>= 13.0'
 depends 'docker'
 
