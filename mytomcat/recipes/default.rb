@@ -11,8 +11,6 @@ docker_image "#{node['url']}/mytomcat" do
     tag node['version']
     action :pull
 end
-#def flag
-#node.default['flag']= 'docker ps -a | grep 8080 -c'
 ENV['flag']='0'
 ENV['flag']=`docker ps -a | grep '8080->' -c`
 puts "#{ENV['flag'][0]}" 
