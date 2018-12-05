@@ -1,0 +1,9 @@
+DEPENDENCIES
+  mytomcat
+    path: .
+    metadata: true
+
+GRAPH
+  docker (4.6.8)
+  mytomcat (0.1.50)
+    docker (>= 0.0.0)
