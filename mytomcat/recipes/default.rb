@@ -8,7 +8,7 @@ docker_service 'default' do
 end
 
 docker_image "#{node['mytomcat']['url']}/mytomcat" do
-    tag node['version']
+    tag node['mytomcat']['version']
     action :pull
 end
 
