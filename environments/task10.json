@@ -2,7 +2,7 @@
   "name": "task10",
   "description": "",
   "cookbook_versions": {
-  "mytomcat": "= 1.0.6"
+  "mytomcat": "= 1.0.2"
   },
   "json_class": "Chef::Environment",
   "chef_type": "environment",
