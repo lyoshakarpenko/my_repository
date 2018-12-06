@@ -29,7 +29,7 @@ case ENV['flag'][0]
     docker_container 'mytomcat_green' do
         repo "#{node['url']}/mytomcat"
         tag node['version']
-        port '8081:8081'
+        port '8080:8081'
     end
     docker_container 'mytomcat_blue' do
         action [:kill, :delete]
