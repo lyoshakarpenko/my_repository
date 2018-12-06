@@ -7,7 +7,7 @@ node ("master"){
         sh """ sed -i 's/^version.*/'"version '${tags}'"'/' ~/workspace/${mybranch}/mytomcat/metadata.rb"""
         sh """ sed -i "s/mytomcat.*/"'mytomcat"'": "'"='" ${tags}"'"'"/" ~/workspace/${mybranch}/environments/${mybranch}.json"""
         dir('mytomcat') {
-        sh 'berks install && berks upload'
+            sh 'berks install && berks upload'
         }
         sh 'knife environment from file environments/task10.json'
         sh 'knife ssh node-1 "sudo chef-client" -x root -P vagrant'
