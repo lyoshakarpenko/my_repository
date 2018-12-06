@@ -7,7 +7,7 @@ docker_service 'default' do
     action [:create, :start]
 end
 
-docker_image "#{node['url']}/mytomcat" do
+docker_image "#{node['mytomcat']['url']}/mytomcat" do
     tag node['version']
     action :pull
 end
@@ -18,8 +18,8 @@ puts "#{ENV['flag'][0]}"
 case ENV['flag'][0]
     when '0'
     docker_container 'mytomcat_blue' do
-        repo "#{node['url']}/mytomcat"
-        tag node['version']
+        repo "#{node['mytomcat']['url']}/mytomcat"
+        tag node['mytomcat']['version']
         port '8080:8080'
     end	
     docker_container 'mytomcat_green' do
@@ -27,8 +27,8 @@ case ENV['flag'][0]
     end
     else
     docker_container 'mytomcat_green' do
-        repo "#{node['url']}/mytomcat"
-        tag node['version']
+        repo "#{node['mytomcat']['url']}/mytomcat"
+        tag node['mytomcat']['version']
         port '8081:8080'
     end
     docker_container 'mytomcat_blue' do
