@@ -1,0 +1,11 @@
+{
+    "ImageId": "ami-0cfbf4f6db41068ac", 
+    "InstanceType": "t2.micro", 
+    "KeyName": "mykey",
+    "SecurityGroups": [
+         "launch-wizard-1"
+     ],
+    "Monitoring": {
+        "Enabled": true
+    }
+}
