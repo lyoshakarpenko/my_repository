@@ -7,5 +7,6 @@
      ],
     "Monitoring": {
         "Enabled": true
-    }
+    },
+    "UserData" : "#!/bin/bash\n sudo yum install -y httpd\n echo Hello! Created by Aliaksei Karpenka > /var/www/html/index.html\n sudo service httpd start\n" 
 }
